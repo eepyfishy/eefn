@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eefn"
+version = "0.1.0"
+description = "The EEF node system — wire protocol/crypto, node engine, node client, and coordinator node server."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+dependencies = [
+    "cryptography>=41.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.4.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["eefn*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = ["E501"]

@@ -1,19 +1,18 @@
-# EEF node installer — runs the single-file bootstrap via PowerShell.
-# One-liner on a fresh node:
-#   powershell -nop -c "irm http://26.234.244.3:8081/api/node/install.ps1 | iex"
+# EEF node installer — one-liner that provisions a brand-new node from GitHub.
+#
+#   powershell -nop -c "irm https://raw.githubusercontent.com/eepyfishy/eefn/main/install.ps1 | iex"
 param(
-    [string]$From = "http://26.234.244.3:8081",
-    [string]$Name = $env:COMPUTERNAME,
     [string]$Psk = "",
     [string]$Dir = "C:\eefn"
 )
 $ErrorActionPreference = "Stop"
-Write-Host "== EEF node installer =="
-Write-Host "Downloading bootstrap from $From ..."
+Write-Host "== EEF node installer (from GitHub) =="
 $boot = Join-Path $env:TEMP "bootstrap_eef.py"
-Invoke-WebRequest -UseBasicParsing "$From/api/node/bootstrap.py" -OutFile $boot
+$rawBase = "https://raw.githubusercontent.com/eepyfishy/eefn/main"
+Write-Host "Downloading bootstrap from $rawBase/tools/bootstrap_eef.py ..."
+Invoke-WebRequest -UseBasicParsing "$rawBase/tools/bootstrap_eef.py" -OutFile $boot
 if (-not $Psk) {
     $Psk = Read-Host "Enter coordinator PSK (node.psk)"
 }
-python $boot --from $From --name $Name --psk $Psk --dir $Dir
-Write-Host "Node installed. Start it with:  python $Dir\run_node.py"
+python $boot --psk $Psk --dir $Dir
+Write-Host "Node installed. Start it with:  python $Dir\run_node.py  (or double-click start.cmd)"

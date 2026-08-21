@@ -17,5 +17,5 @@ config.json          # generated per-node (node_id/psk/endpoints) — never comm
 .env
 *.local
 
-# Built dist
-dist/
+# NOTE: dist/eef-node-dist.zip IS committed (nodes pull it from GitHub),
+# so dist/ is NOT ignored here.

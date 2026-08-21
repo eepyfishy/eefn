@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Build eef-node-dist.zip from the flat node modules in THIS repo.
+"""Build dist/eef-node-dist.zip from the flat standalone bundle in node/.
 
-    python make_node_dist.py          # -> dist/eef-node-dist.zip
+    python tools/make_node_dist.py          # -> dist/eef-node-dist.zip
 
-The dist is what a fresh node pulls via the coordinator's /api/node/dist.zip, or
-what this repo provisions directly. Because everything here is flat and
-self-contained (stdlib + cryptography only), the zip is the running node.
+The dist is what a fresh node pulls from GITHUB during provisioning
+(https://github.com/eepyfishy/eefn/raw/main/dist/eef-node-dist.zip), and is
+committed to the repo so that URL always resolves.
 """
 
 from __future__ import annotations
@@ -14,7 +14,8 @@ import sys
 import zipfile
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
+HERE = Path(__file__).resolve().parent.parent
+NODE = HERE / "node"
 DIST = HERE / "dist"
 
 FILES = [
@@ -28,8 +29,8 @@ FILES = [
 
 README = """EEF Node — standalone node runtime.
 
-Installed into its own directory (default C:/eefn) by bootstrap_eef.py. The
-bootstrap writes config.json (node_id, name, psk, ordered endpoints) here.
+Installed into its own directory (default C:/eefn) by bootstrap_eef.py, which
+writes config.json (node_id, name, psk, ordered endpoints) here.
 
 Run:  python run_node.py
 Options:  --connect H:PORT,list   --name NAME   --id ID   --psk SECRET   --allow-write
@@ -43,7 +44,7 @@ def build(out: str | Path | None = None) -> Path:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(str(out_path), "w", zipfile.ZIP_DEFLATED) as zf:
         for name in FILES:
-            zf.write(HERE / name, name)
+            zf.write(NODE / name, name)
         zf.writestr("README.txt", README)
     return out_path
 

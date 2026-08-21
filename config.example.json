@@ -4,6 +4,6 @@
   "psk": "CHANGE_ME_SAME_AS_NODE_PSK",
   "endpoints": [
     "26.234.244.3:8081",
-    "node.eeftuna.playit.plus:8081"
+    "node.eeftuna.playit.plus"
   ]
 }
